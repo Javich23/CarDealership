@@ -38,7 +38,7 @@ public class UserInterface {
         boolean exit = false;
 
         while(!exit) {
-            System.out.println("""
+            System.out.println("\u001B[36m"+"""
 
                     ===== LUXURY AUTOS DEALERSHIP =====
                     [1] Get by Price
