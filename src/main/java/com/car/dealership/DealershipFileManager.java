@@ -20,7 +20,6 @@ public class DealershipFileManager {
             String phone = details[2];
             dealership = new Dealership(name, address, phone);
 
-
             while ((input = bufferedReader.readLine()) != null) {
                 if (!input.isEmpty()) {
                     details = input.split("\\|");

@@ -1,7 +1,6 @@
 package com.car.dealership;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Dealership {
     private final String name;
@@ -35,6 +34,12 @@ public class Dealership {
                 values.add(i);
             }
         }
+        Collections.sort(values, new Comparator<Vehicle>() {
+            @Override
+            public int compare(Vehicle o1, Vehicle o2) {
+                return (int) (o1.getPrice() - o2.getPrice());
+            }
+        });
         return values;
     }
     public List<Vehicle> getByMakeModel(String make, String model) {

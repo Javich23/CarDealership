@@ -1,6 +1,7 @@
 package com.car.dealership;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +20,15 @@ public class UserInterface {
         System.out.printf("%-15s %-15s %-25s %-20s %15S %15S %15s %15s \n", "VIN", "YEAR", "MAKE", "MODEL", "VEHICLE TYPE", "COLOR", "ODOMETER(mi)", "PRICE");
         System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------");
         for(Vehicle i : vehicles){
-            System.out.printf("%-15s %-15s %-25s %-20s %15s %15s %15d %15.2f \n", i.getVin(), i.getYear(), i.getMake(), i.getModel(), i.getVehicleType(), i.getColor(), i.getOdometer(), i.getPrice());
+            System.out.printf("%-15s %-15s %-25s %-20s %15s %15s %15d %15.2f \n",
+                    i.getVin(),
+                    i.getYear(),
+                    i.getMake(),
+                    i.getModel(),
+                    i.getVehicleType(),
+                    i.getColor(),
+                    i.getOdometer(),
+                    i.getPrice());
 
         }
     }
