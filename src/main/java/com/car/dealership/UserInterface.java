@@ -1,7 +1,6 @@
 package com.car.dealership;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -41,6 +40,7 @@ public class UserInterface {
             System.out.println("\u001B[36m"+"""
 
                     ===== LUXURY AUTOS DEALERSHIP =====
+                   
                     [1] Get by Price
                     [2] Get by Make and Model
                     [3] Get by Year
@@ -52,7 +52,7 @@ public class UserInterface {
                     [9] Remove Vehicle
                     [0] Exit""");
 
-            System.out.print("\nEnter your choice: ");
+            System.out.print("\nEnter desired number in []: ");
             int choice = consoleInput.nextInt();
             consoleInput.nextLine();
             switch (choice) {
@@ -82,6 +82,7 @@ public class UserInterface {
         double max = Double.parseDouble(input);
         System.out.println("\n --------------------------------------------------------SELECTION BY PRICE-------------------------------------------------------------------\n");
         displayVehicles(dealership.getByPrice(min, max));
+        returnHome();
     }
     public  void processGetByMakeModel(){
         System.out.print("Enter make: ");
@@ -90,6 +91,7 @@ public class UserInterface {
         String model = consoleInput.nextLine();
         System.out.println("\n ----------------------------------------------------SELECTION BY MAKE AND MODEL--------------------------------------------------------------\n");
         displayVehicles(dealership.getByMakeModel(make, model));
+        returnHome();
     }
     public  void processGetByYear() {
         System.out.print("Enter minimum year: ");
@@ -109,12 +111,14 @@ public class UserInterface {
         }
         System.out.println("\n --------------------------------------------------------SELECTION BY YEAR-------------------------------------------------------------------\n");
         displayVehicles(dealership.getByYear(min, max));
+        returnHome();
     }
     public  void processGetByColor() {
         System.out.print("Enter your color: ");
         String color = consoleInput.nextLine();
         System.out.println("\n --------------------------------------------------------SELECTION BY COLOR------------------------------------------------------------------\n");
         displayVehicles(dealership.getByColor(color));
+        returnHome();
     }
     public  void processGetByMileage() {
         System.out.print("Enter minimum mileage");
@@ -125,16 +129,19 @@ public class UserInterface {
         double max = Double.parseDouble(input);
         System.out.println("\n --------------------------------------------------------SELECTION BY ODOMETER-------------------------------------------------------------------\n");
         displayVehicles(dealership.getByMileage(min, max));
+        returnHome();
     }
     public  void processGetByVehicleType() {
         System.out.print("Enter desired vehicle type: ");
         String vehicleType = consoleInput.nextLine();
         System.out.println("\n ----------------------------------------------------SELECTION BY VEHICLE TYPE----------------------------------------------------------------\n");
         displayVehicles(dealership.getByType(vehicleType));
+        returnHome();
     }
     public  void processGetAllVehicles() {
         System.out.println("\n --------------------------------------------------------ALL VEHICLES IN INVENTORY------------------------------------------------------------\n");
         displayVehicles(dealership.getAllVehicles());
+        returnHome();
     }
     public  void processAddVehicle() {
         System.out.print("Enter vin of vehicle you would like to add: ");
@@ -158,6 +165,7 @@ public class UserInterface {
 
         dealership.addVehicle(vehicle);
         fileManager.saveDealership(dealership);
+        returnHome();
     }
     public void processRemoveVehicle() {
         Vehicle v = null;
@@ -172,5 +180,22 @@ public class UserInterface {
         }
         dealership.removeVehicle(v);
         fileManager.saveDealership(dealership);
+        returnHome();
+    }
+    public void returnHome() {
+        boolean done = false;
+        while(!done) {
+        System.out.print("\nEnter 0 to return to menu: ");
+        int input = consoleInput.nextInt();
+            if (input == 0) {
+                System.out.println("\nReturning to menu... ");
+                done = true;
+                display();
+            } else {
+                System.out.println("\nWrong input try again");
+
+            }
+        }
     }
 }
+
