@@ -45,7 +45,7 @@ public class Dealership {
     public List<Vehicle> getByMakeModel(String make, String model) {
         List<Vehicle> values = new ArrayList<Vehicle>();
         for(Vehicle i : inventory) {
-            if(i.getMake().equals(make) || i.getModel().equals(model)) {
+            if(i.getMake().equalsIgnoreCase(make) || i.getModel().equalsIgnoreCase(model)) {
                 values.add(i);
             }
         }
@@ -64,7 +64,7 @@ public class Dealership {
     public List<Vehicle> getByColor(String color) {
         List<Vehicle> values = new ArrayList<Vehicle>();
         for(Vehicle i : inventory) {
-            if(i.getColor().equals(color)) {
+            if(i.getColor().equalsIgnoreCase(color)) {
                 values.add(i);
             }
         }
@@ -81,7 +81,7 @@ public class Dealership {
     public List<Vehicle> getByType(String vehicleType) {
         List<Vehicle> values = new ArrayList<Vehicle>();
         for(Vehicle i : inventory) {
-            if(i.getVehicleType().equals(vehicleType)) {
+            if(i.getVehicleType().equalsIgnoreCase(vehicleType)) {
                 values.add(i);
             }
         }
