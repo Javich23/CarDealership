@@ -7,18 +7,19 @@ import java.util.Scanner;
 public class UserInterface {
     static Scanner consoleInput = new Scanner(System.in);
     Dealership dealership;
+    ContractDataManager contractDataManager;
     private DealershipFileManager fileManager;
 
-    private void init(){
+    private void init() {
         fileManager = new DealershipFileManager();
-
+        contractDataManager = new ContractDataManager();
         dealership = fileManager.getDealership();
     }
 
     private void displayVehicles(List<Vehicle> vehicles) {
         System.out.printf("%-15s %-15s %-25s %-20s %15S %15S %15s %15s \n", "VIN", "YEAR", "MAKE", "MODEL", "VEHICLE TYPE", "COLOR", "ODOMETER(mi)", "PRICE");
         System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------");
-        for(Vehicle i : vehicles){
+        for (Vehicle i : vehicles) {
             System.out.printf("%-15s %-15s %-25s %-20s %15s %15s %15d %15.2f \n",
                     i.getVin(),
                     i.getYear(),
@@ -31,16 +32,17 @@ public class UserInterface {
 
         }
     }
+
     public void display() {
         init();
 
         boolean exit = false;
 
-        while(!exit) {
-            System.out.println("\u001B[36m"+"""
+        while (!exit) {
+            System.out.println("\u001B[36m" + """
 
                     ===== LUXURY AUTOS DEALERSHIP =====
-                   
+                                       
                     [1] Get by Price
                     [2] Get by Make and Model
                     [3] Get by Year
@@ -50,6 +52,7 @@ public class UserInterface {
                     [7] Get All Vehicles
                     [8] Add Vehicle
                     [9] Remove Vehicle
+                    [10] Buy or Lease Vehicle
                     [0] Exit""");
 
             System.out.print("\nEnter desired number in []: ");
@@ -65,6 +68,7 @@ public class UserInterface {
                 case 7 -> processGetAllVehicles();
                 case 8 -> processAddVehicle();
                 case 9 -> processRemoveVehicle();
+                case 10 -> processContractInfo();
                 case 0 -> {
                     System.out.println("Exiting...");
                     System.exit(0);
@@ -73,6 +77,7 @@ public class UserInterface {
             }
         }
     }
+
     public void processGetByPrice() {
         System.out.print("Enter minimum price: ");
         String input = consoleInput.nextLine();
@@ -84,7 +89,8 @@ public class UserInterface {
         displayVehicles(dealership.getByPrice(min, max));
         returnHome();
     }
-    public  void processGetByMakeModel(){
+
+    public void processGetByMakeModel() {
         System.out.print("Enter make: ");
         String make = consoleInput.nextLine();
         System.out.print("Enter model: ");
@@ -93,7 +99,8 @@ public class UserInterface {
         displayVehicles(dealership.getByMakeModel(make, model));
         returnHome();
     }
-    public  void processGetByYear() {
+
+    public void processGetByYear() {
         System.out.print("Enter minimum year: ");
         String input = consoleInput.nextLine();
         int min = LocalDate.now().getYear();
@@ -113,14 +120,16 @@ public class UserInterface {
         displayVehicles(dealership.getByYear(min, max));
         returnHome();
     }
-    public  void processGetByColor() {
+
+    public void processGetByColor() {
         System.out.print("Enter your color: ");
         String color = consoleInput.nextLine();
         System.out.println("\n --------------------------------------------------------SELECTION BY COLOR------------------------------------------------------------------\n");
         displayVehicles(dealership.getByColor(color));
         returnHome();
     }
-    public  void processGetByMileage() {
+
+    public void processGetByMileage() {
         System.out.print("Enter minimum mileage");
         String input = consoleInput.nextLine();
         double min = Double.parseDouble(input);
@@ -131,19 +140,22 @@ public class UserInterface {
         displayVehicles(dealership.getByMileage(min, max));
         returnHome();
     }
-    public  void processGetByVehicleType() {
+
+    public void processGetByVehicleType() {
         System.out.print("Enter desired vehicle type: ");
         String vehicleType = consoleInput.nextLine();
         System.out.println("\n ----------------------------------------------------SELECTION BY VEHICLE TYPE----------------------------------------------------------------\n");
         displayVehicles(dealership.getByType(vehicleType));
         returnHome();
     }
-    public  void processGetAllVehicles() {
+
+    public void processGetAllVehicles() {
         System.out.println("\n --------------------------------------------------------ALL VEHICLES IN INVENTORY------------------------------------------------------------\n");
         displayVehicles(dealership.getAllVehicles());
         returnHome();
     }
-    public  void processAddVehicle() {
+
+    public void processAddVehicle() {
         System.out.print("Enter vin of vehicle you would like to add: ");
         int vin = consoleInput.nextInt();
         System.out.print("Enter year: ");
@@ -161,18 +173,19 @@ public class UserInterface {
         System.out.print("Enter price: ");
         double price = consoleInput.nextDouble();
         System.out.println("\nVehicle successfully added ");
-        Vehicle vehicle = new Vehicle(vin, year, make, model, vehicleType, color,odometer,price);
+        Vehicle vehicle = new Vehicle(vin, year, make, model, vehicleType, color, odometer, price);
 
         dealership.addVehicle(vehicle);
         fileManager.saveDealership(dealership);
         returnHome();
     }
+
     public void processRemoveVehicle() {
         Vehicle v = null;
         System.out.print("Enter vin of vehicle you would like to remove: ");
         int vin = consoleInput.nextInt();
-        for(Vehicle i : dealership.getAllVehicles()){
-            if(i.getVin() == vin) {
+        for (Vehicle i : dealership.getAllVehicles()) {
+            if (i.getVin() == vin) {
                 System.out.println("Vehicle has been removed");
                 v = i;
                 break;
@@ -182,11 +195,77 @@ public class UserInterface {
         fileManager.saveDealership(dealership);
         returnHome();
     }
+
+    public void processContractInfo() {
+        LocalDate date = LocalDate.now();
+        System.out.print("Please enter your full name: ");
+        String name = consoleInput.nextLine();
+        System.out.print("Please enter your email address: ");
+        String email = consoleInput.nextLine();
+        System.out.print("Please enter Vin of desire vehicle: ");
+        int vin = consoleInput.nextInt();
+        consoleInput.nextLine();
+        Vehicle vehicle = null;
+        for (Vehicle v : dealership.getAllVehicles()) {
+            if (v.getVin() == vin) {
+                vehicle = v;
+                break;
+            }
+        }
+        System.out.println("""
+                Purchase Options Available
+                                           
+                [1] Buy A Vehicle
+                [2] Lease A Vehicle
+                [3] Return to Main Screen
+                """);
+        System.out.print("Enter your choice: ");
+        int choice = consoleInput.nextInt();
+        consoleInput.nextLine();
+        boolean done = true;
+        while (done) {
+            switch (choice) {
+                case 1 -> {
+                    System.out.println("Do you wish to finance the vehicle? (Y/N)");
+                    String yOrN = consoleInput.nextLine().toUpperCase();
+                    boolean finance = yOrN.equals("Y");
+
+                    if (yOrN.equals("Y")) {
+                        SalesContract salesContract = new SalesContract(date, name, email, vehicle, finance);
+                        contractDataManager.saveContract(salesContract);
+                        dealership.removeVehicle(vehicle);
+                    } else {
+                        System.out.println("Total will be " + vehicle.getPrice());
+                    }
+                    dealership.removeVehicle(vehicle);
+                    fileManager.saveDealership(dealership);
+                    done = false;
+                }
+                case 2 -> {
+                    LeaseContract leaseContract = new LeaseContract(date, name, email, vehicle);
+                    double monthlyPayment = leaseContract.getMonthlyPayment();
+                    System.out.println("Vehicle successfully leased for 3 years");
+                    System.out.println("Monthly Payment: " + monthlyPayment);
+                    contractDataManager.saveContract(leaseContract);
+                    dealership.removeVehicle(vehicle);
+                    fileManager.saveDealership(dealership);
+                    done = false;
+
+                }
+                case 3 -> {
+                    returnHome();
+                    done = false;
+                }
+                default -> System.out.println("Invalid option try again ");
+            }
+        }
+    }
+
     public void returnHome() {
         boolean done = false;
-        while(!done) {
-        System.out.print("\nEnter 0 to return to menu: ");
-        int input = consoleInput.nextInt();
+        while (!done) {
+            System.out.print("\nEnter 0 to return to menu: ");
+            int input = consoleInput.nextInt();
             if (input == 0) {
                 System.out.println("\nReturning to menu... ");
                 done = true;
@@ -198,4 +277,6 @@ public class UserInterface {
         }
     }
 }
+
+
 
